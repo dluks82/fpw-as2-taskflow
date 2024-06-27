@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '8080:80'
+      - '8082:80'
     volumes:
       - ./src:/var/www/html
     environment:
@@ -36,7 +36,7 @@ services:
     image: phpmyadmin:latest
     container_name: phpmyadmin_php_taskflow
     ports:
-      - '8081:80'
+      - '8083:80'
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
