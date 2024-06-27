@@ -1,0 +1,35 @@
+@media (max-width: 576px) {
+    .btn-group .btn {
+        padding: 0.375rem 0.75rem;
+    }
+    
+    .btn-group .btn .d-md-inline {
+        display: none !important;
+    }
+
+    .btn-group .btn .d-inline {
+        display: inline !important;
+    }
+
+    .btn-group a {
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .btn-group a span:not(.badge) {
+        display: none !important;
+    }
+
+    .btn-group .badge {
+        margin-left: 0.25rem;
+    }
+}
+
+.btn-group .btn {
+    border-radius: 0.25rem;
+}
+
+.list-group-item .btn-group .btn {
+    margin-right: 0.25rem;
+}
