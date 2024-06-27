@@ -2,4 +2,7 @@
 .env
 
 # Local database
-db-taskflow
+db-taskflow/
+
+# Dependency directory
+vendor/
