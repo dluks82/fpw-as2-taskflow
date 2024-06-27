@@ -24,20 +24,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       header('Location: /tasks.php');
       exit;
     } else {
-      if ($conn->errno == 1062) { // Duplicate entry error code
-        $_SESSION['error'] = 'Email já registrado. Tente outro.';
-      } else {
-        $_SESSION['error'] = 'Erro ao registrar. Tente novamente.';
-      }
+      throw new Exception($stmt->error, $stmt->errno);
     }
     $stmt->close();
+  } catch (mysqli_sql_exception $e) {
+    if ($e->getCode() == 1062) { // Duplicate entry error code
+      $_SESSION['error'] = 'Email já registrado. Tente outro.';
+    } else {
+      $_SESSION['error'] = 'Erro ao registrar. Tente novamente.';
+    }
+    header('Location: /register.php');
+    exit;
   } catch (Exception $e) {
     $_SESSION['error'] = 'Erro interno. Tente novamente.';
     // Para fins de depuração, você pode registrar $e->getMessage() em um log
+    header('Location: /register.php');
+    exit;
   }
-
-  header('Location: /register.php');
-  exit;
 }
 
 include 'templates/header.php';
