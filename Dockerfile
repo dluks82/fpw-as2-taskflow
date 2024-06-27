@@ -24,6 +24,15 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 # Definir permissões de execução para o script de entrada
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
+# Copiar o composer.json e composer.lock antes de instalar as dependências
+COPY ./src/composer.json ./src/composer.lock ./
+
+# Instalar dependências do Composer
+RUN composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest --no-interaction
+
+# Copiar o restante dos arquivos da aplicação
+COPY ./src /var/www/html
+
 # Expor a porta 80 do Apache
 EXPOSE 80
 
