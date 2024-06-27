@@ -12,6 +12,10 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Copiar composer.json e composer.lock antes de instalar as dependências
+COPY ./src/composer.json ./src/composer.lock ./
+RUN composer install
+
 # Configurar o diretório de trabalho
 WORKDIR /var/www/html
 
