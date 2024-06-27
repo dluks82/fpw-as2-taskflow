@@ -1,0 +1,42 @@
+services:
+  web:
+    # image: php:apache
+    container_name: php_apache_taskflow
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:80'
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      APP_ENV: ${APP_ENV}
+    command: >
+      sh -c "composer install && apache2-foreground"
+
+  db:
+    image: mysql:latest
+    container_name: mysql_php_taskflow
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./db-taskflow:/var/lib/mysql
+      - ./mysql.cnf:/etc/mysql/conf.d/my.cnf # Montar o arquivo de configuração
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_php_taskflow
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}

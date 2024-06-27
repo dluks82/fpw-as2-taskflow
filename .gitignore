@@ -1,0 +1,5 @@
+# Local development environment
+.env
+
+# Local database
+db-taskflow
