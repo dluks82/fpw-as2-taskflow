@@ -1,6 +1,5 @@
 services:
   web:
-    # image: php:apache
     container_name: php_apache_taskflow
     build:
       context: .
@@ -15,8 +14,6 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       APP_ENV: ${APP_ENV}
-    command: >
-      sh -c "composer install && apache2-foreground"
 
   db:
     image: mysql:latest
