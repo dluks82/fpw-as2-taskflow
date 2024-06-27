@@ -7,7 +7,7 @@ services:
     ports:
       - '8082:80'
     volumes:
-      - ./src:/var/www/html
+      - web_data:/var/www/html
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -26,7 +26,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - ./db-taskflow:/var/lib/mysql
+      - db_data:/var/lib/mysql
       - ./mysql.cnf:/etc/mysql/conf.d/my.cnf # Montar o arquivo de configuração
 
   phpmyadmin:
@@ -37,3 +37,7 @@ services:
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+volumes:
+  web_data:
+  db_data:

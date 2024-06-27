@@ -18,9 +18,6 @@ WORKDIR /var/www/html
 # Definir o ServerName globalmente para suprimir o aviso
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Copiar os arquivos da aplicação
-COPY ./src /var/www/html
-
 # Copiar o script de entrada
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
