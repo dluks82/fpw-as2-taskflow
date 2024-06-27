@@ -28,7 +28,6 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./mysql.cnf:/etc/mysql/conf.d/my.cnf # Montar o arquivo de configuração
-      - ./init-scripts:/docker-entrypoint-initdb.d # Scripts de inicialização
 
   phpmyadmin:
     image: phpmyadmin:latest

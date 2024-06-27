@@ -12,18 +12,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
   }
 
-  $stmt = $conn->prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?)');
-  $stmt->bind_param('sss', $name, $email, $password);
+  try {
+    $stmt = $conn->prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?)');
+    if (!$stmt) {
+      throw new Exception($conn->error);
+    }
+    $stmt->bind_param('sss', $name, $email, $password);
 
-  if ($stmt->execute()) {
-    $_SESSION['user'] = ['id' => $stmt->insert_id, 'name' => $name, 'email' => $email];
-    header('Location: /tasks.php');
-  } else {
-    $_SESSION['error'] = 'Erro ao registrar. Tente novamente.';
-    header('Location: /register.php');
+    if ($stmt->execute()) {
+      $_SESSION['user'] = ['id' => $stmt->insert_id, 'name' => $name, 'email' => $email];
+      header('Location: /tasks.php');
+      exit;
+    } else {
+      if ($conn->errno == 1062) { // Duplicate entry error code
+        $_SESSION['error'] = 'Email já registrado. Tente outro.';
+      } else {
+        $_SESSION['error'] = 'Erro ao registrar. Tente novamente.';
+      }
+    }
+    $stmt->close();
+  } catch (Exception $e) {
+    $_SESSION['error'] = 'Erro interno. Tente novamente.';
+    // Para fins de depuração, você pode registrar $e->getMessage() em um log
   }
 
-  $stmt->close();
+  header('Location: /register.php');
   exit;
 }
 
