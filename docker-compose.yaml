@@ -3,7 +3,6 @@ services:
     container_name: php_apache_taskflow
     build:
       context: .
-      dockerfile: Dockerfile
     ports:
       - '8082:80'
     volumes:
@@ -28,19 +27,19 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./mysql.cnf:/etc/mysql/conf.d/my.cnf # Montar o arquivo de configuração
+      - ./init-scripts:/docker-entrypoint-initdb.d # Scripts de inicialização
 
   phpmyadmin:
-    image: phpmyadmin:latest
+    build:
+      context: .
+      dockerfile: Dockerfile_phpmyadmin
     container_name: phpmyadmin_php_taskflow
     ports:
       - '8083:80'
+      - '8443:443'
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    command: >
-      sh -c "echo 'ServerName localhost' >> /etc/apache2/apache2.conf && apache2-foreground"
-    depends_on:
-      - db
 
 volumes:
   web_data:
