@@ -15,10 +15,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Configurar o diretório de trabalho
 WORKDIR /var/www/html
 
-# Copiar composer.json e composer.lock antes de instalar as dependências
-COPY ./src/composer.json ./src/composer.lock ./
-RUN composer install
-
 # Copiar os arquivos da aplicação
 COPY ./src /var/www/html
 

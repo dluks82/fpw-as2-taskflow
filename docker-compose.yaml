@@ -9,9 +9,6 @@ services:
       - '8082:80'
     volumes:
       - ./src:/var/www/html
-      - ./src/vendor:/var/www/html/vendor
-      - ./src/composer.json:/var/www/html/composer.json
-      - ./src/composer.lock:/var/www/html/composer.lock
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
