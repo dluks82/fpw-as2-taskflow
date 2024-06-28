@@ -1,5 +1,11 @@
 services:
   web:
+    environment:
+      - APP_ENV=local
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - ./src:/var/www/html
   db:
