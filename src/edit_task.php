@@ -16,7 +16,7 @@ $result = $stmt->get_result();
 $task = $result->fetch_assoc();
 $stmt->close();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
   $title = htmlspecialchars(trim($_POST['title']), ENT_QUOTES, 'UTF-8');
   $description = htmlspecialchars(trim($_POST['description']), ENT_QUOTES, 'UTF-8');
   $due_date = DateTime::createFromFormat('d/m/Y', $_POST['due_date'])->format('Y-m-d');
@@ -60,7 +60,9 @@ include 'templates/header.php';
       <label for="due_date" class="form-label">Data de Entrega</label>
       <input type="text" class="form-control" id="due_date" name="due_date" value="<?php echo (new DateTime($task['due_date']))->format('d/m/Y'); ?>" required>
     </div>
+    <input type="hidden" name="action" value="update">
     <button type="submit" class="btn btn-primary">Atualizar Tarefa</button>
+    <a href="/tasks.php" class="btn btn-secondary">Cancelar</a>
   </form>
 </div>
 

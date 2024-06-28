@@ -8,7 +8,7 @@ if (!isset($_SESSION['user'])) {
 
 $user = $_SESSION['user'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
   $title = htmlspecialchars(trim($_POST['title']), ENT_QUOTES, 'UTF-8');
   $description = htmlspecialchars(trim($_POST['description']), ENT_QUOTES, 'UTF-8');
   $due_date = DateTime::createFromFormat('d/m/Y', $_POST['due_date'])->format('Y-m-d');
@@ -53,7 +53,9 @@ include 'templates/header.php';
       <label for="due_date" class="form-label">Data de Entrega</label>
       <input type="text" class="form-control" id="due_date" name="due_date" required>
     </div>
+    <input type="hidden" name="action" value="create">
     <button type="submit" class="btn btn-primary">Criar Tarefa</button>
+    <a href="/tasks.php" class="btn btn-secondary">Cancelar</a>
   </form>
 </div>
 

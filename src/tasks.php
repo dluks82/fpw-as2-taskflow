@@ -18,7 +18,6 @@ $stmt = $conn->prepare($allQuery);
 $stmt->bind_param('i', $user['id']);
 $stmt->execute();
 $result = $stmt->get_result();
-$tasks = $result->fetch_all(MYSQLI_ASSOC);
 $allCount = $result->num_rows;
 $stmt->close();
 
@@ -69,12 +68,22 @@ include 'templates/header.php';
 <div class="container">
   <h1><?php echo $title; ?></h1>
   <div class="d-flex justify-content-between mb-3 flex-wrap">
-    <a href="/create_task.php" class="btn btn-primary me-2 mb-2"><i class="fas fa-plus"></i><span class="d-none d-md-inline"> Criar Nova Tarefa</span></a>
+    <a href="/create_task.php" class="btn btn-primary me-2 mb-2">
+      <i class="fas fa-plus"></i><span class="d-none d-md-inline"> Criar Nova Tarefa</span>
+    </a>
     <div class="btn-group mb-2" role="group">
-      <a href="/tasks.php?filter=all" class="btn btn-outline-primary <?php echo $filter === 'all' ? 'active' : ''; ?>"><span class="badge bg-primary"><?php echo $allCount; ?></span><span class="d-none d-md-inline"> Todas</span></a>
-      <a href="/tasks.php?filter=completed" class="btn btn-outline-success <?php echo $filter === 'completed' ? 'active' : ''; ?>"><span class="badge bg-success"><?php echo $completedCount; ?></span><span class="d-none d-md-inline"> Concluídas</span></a>
-      <a href="/tasks.php?filter=pending" class="btn btn-outline-warning <?php echo $filter === 'pending' ? 'active' : ''; ?>"><span class="badge bg-warning"><?php echo $pendingCount; ?></span><span class="d-none d-md-inline"> Pendentes</span></a>
-      <a href="/tasks.php?filter=overdue" class="btn btn-outline-danger <?php echo $filter === 'overdue' ? 'active' : ''; ?>"><span class="badge bg-danger"><?php echo $overdueCount; ?></span><span class="d-none d-md-inline"> Vencidas</span></a>
+      <a href="/tasks.php?filter=all" class="btn btn-outline-primary <?php echo $filter === 'all' ? 'active' : ''; ?>">
+        <span class="badge bg-primary"><?php echo $allCount; ?></span><span class="d-none d-md-inline"> Todas</span>
+      </a>
+      <a href="/tasks.php?filter=completed" class="btn btn-outline-success <?php echo $filter === 'completed' ? 'active' : ''; ?>">
+        <span class="badge bg-success"><?php echo $completedCount; ?></span><span class="d-none d-md-inline"> Concluídas</span>
+      </a>
+      <a href="/tasks.php?filter=pending" class="btn btn-outline-warning <?php echo $filter === 'pending' ? 'active' : ''; ?>">
+        <span class="badge bg-warning"><?php echo $pendingCount; ?></span><span class="d-none d-md-inline"> Pendentes</span>
+      </a>
+      <a href="/tasks.php?filter=overdue" class="btn btn-outline-danger <?php echo $filter === 'overdue' ? 'active' : ''; ?>">
+        <span class="badge bg-danger"><?php echo $overdueCount; ?></span><span class="d-none d-md-inline"> Vencidas</span>
+      </a>
     </div>
   </div>
   <?php if (isset($_SESSION['success'])) : ?>
@@ -105,10 +114,9 @@ include 'templates/header.php';
               </form>
             <?php endif; ?>
             <a href="/edit_task.php?id=<?php echo $task['id']; ?>" class="btn btn-warning me-1" title="Editar"><i class="fas fa-edit"></i><span class="d-none d-md-inline"> Editar</span></a>
-            <form action="/delete_task.php" method="post" style="display:inline;">
-              <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
-              <button type="submit" class="btn btn-danger" title="Excluir"><i class="fas fa-trash"></i><span class="d-none d-md-inline"> Excluir</span></button>
-            </form>
+            <button type="button" class="btn btn-danger" title="Excluir" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-task-id="<?php echo $task['id']; ?>">
+              <i class="fas fa-trash"></i><span class="d-none d-md-inline"> Excluir</span>
+            </button>
           </div>
         </li>
       <?php endforeach; ?>
@@ -117,5 +125,39 @@ include 'templates/header.php';
     <p>Nenhuma tarefa encontrada.</p>
   <?php endif; ?>
 </div>
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Você tem certeza que deseja excluir esta tarefa?
+      </div>
+      <div class="modal-footer">
+        <form id="deleteTaskForm" action="/delete_task.php" method="post">
+          <input type="hidden" name="task_id" id="deleteTaskId">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Excluir</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var confirmDeleteModal = document.getElementById('confirmDeleteModal');
+    confirmDeleteModal.addEventListener('show.bs.modal', function(event) {
+      var button = event.relatedTarget;
+      var taskId = button.getAttribute('data-task-id');
+      var deleteTaskId = confirmDeleteModal.querySelector('#deleteTaskId');
+      deleteTaskId.value = taskId;
+    });
+  });
+</script>
 
 <?php include 'templates/footer.php'; ?>
