@@ -68,6 +68,9 @@ include 'templates/header.php';
     </div>
     <button type="submit" class="btn btn-primary">Registrar</button>
   </form>
+
+  <p class="mt-3">Já tem uma conta? <a href="/login.php">Faça login</a></p>
+
 </div>
 
 <?php include 'templates/footer.php'; ?>
