@@ -9,38 +9,12 @@ services:
     volumes:
       - web_data:/var/www/html
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       APP_ENV: ${APP_ENV}
-
-  db:
-    image: mysql:latest
-    container_name: mysql_php_taskflow
-    ports:
-      - '3306:3306'
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    volumes:
-      - db_data:/var/lib/mysql
-      - ./mysql.cnf:/etc/mysql/conf.d/my.cnf # Montar o arquivo de configuração
-
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: phpmyadmin_php_taskflow
-    ports:
-      - '8083:80'
-    environment:
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    command: >
-      sh -c "echo 'ServerName localhost' >> /etc/apache2/apache2.conf && apache2-foreground"
-    depends_on:
-      - db
+    entrypoint: /usr/local/bin/entrypoint.sh
 
 volumes:
   web_data:

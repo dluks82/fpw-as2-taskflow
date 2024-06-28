@@ -27,8 +27,8 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 # Copiar o composer.json e composer.lock antes de instalar as dependências
 COPY ./src/composer.json ./src/composer.lock ./
 
-# Instalar dependências do Composer
-RUN composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest --no-interaction
+# Instalar dependências do Composer no ambiente de desenvolvimento
+RUN if [ "$APP_ENV" = "local" ]; then composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest --no-interaction; fi
 
 # Copiar o restante dos arquivos da aplicação
 COPY ./src /var/www/html
