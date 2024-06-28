@@ -59,4 +59,6 @@ include 'templates/header.php';
   </form>
 </div>
 
+<div class="mt-3"></div>
+
 <?php include 'templates/footer.php'; ?>

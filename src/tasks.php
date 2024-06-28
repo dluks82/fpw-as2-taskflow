@@ -124,6 +124,7 @@ include 'templates/header.php';
   <?php else : ?>
     <p>Nenhuma tarefa encontrada.</p>
   <?php endif; ?>
+  <div class="mt-3"></div>
 </div>
 
 <!-- Modal de Confirmação -->
