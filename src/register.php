@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   try {
     $stmt = $conn->prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?)');
     if (!$stmt) {
-      throw new Exception($conn->error);
+      throw new mysqli_sql_exception($conn->error, $conn->errno);
     }
     $stmt->bind_param('sss', $name, $email, $password);
 
@@ -24,9 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       header('Location: /tasks.php');
       exit;
     } else {
-      throw new Exception($stmt->error, $stmt->errno);
+      throw new mysqli_sql_exception($stmt->error, $stmt->errno);
     }
-    $stmt->close();
   } catch (mysqli_sql_exception $e) {
     if ($e->getCode() == 1062) { // Duplicate entry error code
       $_SESSION['error'] = 'Email já registrado. Tente outro.';
@@ -35,11 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     header('Location: /register.php');
     exit;
-  } catch (Exception $e) {
-    $_SESSION['error'] = 'Erro interno. Tente novamente.';
-    // Para fins de depuração, você pode registrar $e->getMessage() em um log
-    header('Location: /register.php');
-    exit;
+  } finally {
+    if (isset($stmt)) {
+      $stmt->close();
+    }
+    $conn->close();
   }
 }
 
