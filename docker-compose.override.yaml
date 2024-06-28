@@ -8,6 +8,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - ./src:/var/www/html
+
   db:
     image: mysql:latest
     container_name: mysql_php_taskflow
@@ -34,3 +35,6 @@ services:
       sh -c "echo 'ServerName localhost' >> /etc/apache2/apache2.conf && apache2-foreground"
     depends_on:
       - db
+
+volumes:
+  db_data:

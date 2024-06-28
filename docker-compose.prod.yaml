@@ -1,8 +1,0 @@
-services:
-  web:
-    environment:
-      MYSQL_HOST: ${MYSQL_HOST}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      APP_ENV: ${APP_ENV}

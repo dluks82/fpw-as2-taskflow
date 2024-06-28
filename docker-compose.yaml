@@ -6,16 +6,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - '8082:80'
-    volumes:
-      - web_data:/var/www/html
     environment:
       MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      APP_ENV: ${APP_ENV}
-    entrypoint: /usr/local/bin/entrypoint.sh
+      APP_ENV: production
 
 volumes:
   web_data:
-  db_data:
+    external: true
