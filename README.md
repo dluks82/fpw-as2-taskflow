@@ -44,7 +44,7 @@ MYSQL_PASSWORD=password
 Para iniciar o ambiente de desenvolvimento local, que inclui o servidor web, MySQL e phpMyAdmin, execute:
 
 ```sh
-docker-compose up -d
+docker-compose -f docker-compose.yaml -f docker-compose.override.yaml up -d
 ```
 
 ### Passo 4: Criar as Tabelas no Banco de Dados
@@ -59,7 +59,7 @@ Após iniciar os serviços, você precisa criar as tabelas no banco de dados. Co
 
 - Selecione o banco de dados taskflow.
 
-- Importe o arquivo SQL localizado em init-scripts/init.sql.
+- Importe o arquivo SQL localizado em `init-scripts/init.sql`.
 
 #### Usando a linha de comando
 
@@ -88,19 +88,50 @@ phpMyAdmin: <http://localhost:8083> (apenas em desenvolvimento)
 Para parar e remover os contêineres, volumes e redes criadas pelo Docker Compose, execute:
 
 ```sh
-docker-compose down
+docker-compose -f docker-compose.yaml -f docker-compose.override.yaml down
 ```
 
 ## Estrutura de Diretórios
 
-- **src/**: Código-fonte do aplicativo.
-- **init-scripts/**: Scripts SQL para inicialização do banco de dados.
-- **.env**: Arquivo de variáveis de ambiente.
-- **Dockerfile**: Arquivo de configuração do Docker para o servidor web.
-- **docker-compose.yml**: Arquivo de configuração do Docker Compose.
-- **docker-compose.override.yml**: Arquivo de configuração adicional para desenvolvimento.
-- **docker-compose.prod.yml**: Arquivo de configuração adicional para produção.
-- **entrypoint.sh**: Script de entrada do contêiner Docker.
+```unicode
+  ├── db_scripts
+  |  ├── init.sql
+  |  ├── tasks_table.sql
+  |  └── users_table.sql
+  ├── src
+  |  ├── css
+  |  │   └── styles.css
+  |  ├── js
+  |  │   └── script.js
+  |  └── templates
+  |      ├── footer.php
+  |      └── header.php
+  ├── complete_task.php
+  ├── composer.json
+  ├── composer.lock
+  ├── config.php
+  ├── create_task.php
+  ├── delete_task.php
+  ├── edit_task.php
+  ├── incomplete_task.php
+  ├── index.php
+  ├── init.php
+  ├── login.php
+  ├── logout.php
+  ├── register.php
+  ├── tasks.php
+  ├── .env.example
+  ├── .gitignore
+  ├── deploy-dev.sh
+  ├── deploy.sh
+  ├── docker-compose.override.yml
+  ├── docker-compose.prod.yml
+  ├── docker-compose.yml
+  ├── Dockerfile
+  ├── entrypoint.sh
+  ├── mysql.cnf
+  └── README.md
+```
 
 ## Licença
 
